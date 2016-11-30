@@ -10,22 +10,48 @@ To setup a multi-site solution with Camaleon CMS on Heroku is a great way to man
 
 Camaleon CMS is an awesome open source CMS that can be easily installed as a ruby gem - the installation process is quite forward - simply head over to the repo for installation details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including Heroku deployment & CMS-usage instructions etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
 
-2. EDit config.json 
+2. Edit config.json 
 
 How do I create and assign users to specific sites only 
 
+3. Local: Start server, setup Camaleon CMS + create a couple of Sites 
 
-3. Setup a custom domain for your heroku app & enable wildcard subdomains 
+Camaleon CMS has MultiSite-Support backed in, so you don't need to take care of seting up multi-tenancy in your Rails app <>. Thanks to this and domains like `lvh.me` or `smackaho.st` setting up multiple sites locally is a breeze (though I think `smackaho.st` won't be accessible for ever because it won't be renewed by it's owner - we stick with `lvh.me` here)
+
+So once installation is complete you simply `cd` into your app's dir, fire up your local server by typing `rails s`  in your terminal + navigate to http://lvh.me:3000/. `lvh.me` (lvh = local virtual host) is a domain which resolves to your local machine (i.e. `localhost` (`127.0.0.1`)) - the same goes for all its potential subdomains (`*.lvh.me` `[whateversubdomainyoucanthinkof].lvh.me`). Which makes it really great for local subdomain testing. 
+
+ He set up a localhost wildcard, pointing *.smackaho.st at 127.0.0.1. Essentially this means that [anything].lvh.me will point to your local machine. 
+
+ 
+
+It resolves itself and all its subdomains to 127.0.0.1. So you can easily test virtual subdomains as xxx.lvh.me without setting up your own DNS or touching /etc/hosts.
+
+
+
+
+If you did setup everything fine, you should see <....>. <....>. Play a bit with Camaleon CMS to get aquainted with the CMS. Navigate to <....> to create a couple of sites and use sudomains as keys (slug) - e.g. fubar. http://fubar.lvh.me:3000/    
+
+& use lvh.me for local subdomain testing
+
+4. Push your new app to heroku 
+
+Now it's time to push you Camaleon CMS app to heroku ...
+
+5. Setup a custom domain for your heroku app & enable wildcard subdomains 
 
 a) Domain-Registrar   
+
+First of all we need to map your custom domain (f.i. ' www.mydomain.de' ) to your heroku app ('xy') and enable wildcard subdomains for this domain (' *.mydomain.de ' ). The latter will allow to    
+
 
 (1 main-/default-site like www.mydomain.de+ n further sites accessible via subdomains/keys like fu.mydomain.de, bar.mydomain.de etc... )
 
 - Create an DNSimple-Account & register your domain with DNSimple 
 - Create 2 CNAME records for your freshly registered domain:
 
-CNAME 	*.ourschoolnet.de       =>    ourschoolnet.herokuapp.com 	
 CNAME 	www.ourschoolnet.de 	 =>   ourschoolnet.herokuapp.com 	
+CNAME 	*.ourschoolnet.de       =>    ourschoolnet.herokuapp.com 	
+
 
 - if your domain is hosted elsewhere (godaddy for example): Log into godaddy and change the names of the nameservers for your domain to the following:
 
