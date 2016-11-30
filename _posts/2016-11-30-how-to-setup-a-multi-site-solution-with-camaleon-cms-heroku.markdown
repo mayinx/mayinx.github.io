@@ -27,11 +27,14 @@ If you did setup everything fine, you should see <....>. <....>. Play a bit with
 
 Now it's time to push your Raisl app to heroku ...
 
-5. Domain-Registrar / DNSimple + Heroku: Setup a custom domain for your heroku app & enable wildcard subdomains 
+5. Setup a custom domain for your heroku app & enable wildcard subdomains 
 
 a) Domain-Registrar   
 
-First of all we need to map your custom domain (f.i. ' www.mydomain.de' ) to your heroku app ('xy') and enable wildcard subdomains for this domain (' *.mydomain.de ' ). The latter will allow to    
+First of all we need to map your custom domain (let's call it `www.mydomain.com` ) to your Heroku app (`myapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.mydomain.de ` ). For this to work you need to change the DNS-settings of `mydomain.com`. Depending where you registered your domain, this process may differ. 
+
+If you registered your domain with a registra taht doesn't alalow 
+you can edit it's DNS-settings or not.  The latter will allow to    
 
 
 (1 main-/default-site like www.mydomain.de+ n further sites accessible via subdomains/keys like fu.mydomain.de, bar.mydomain.de etc... )
