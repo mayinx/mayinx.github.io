@@ -4,15 +4,32 @@ title: How to setup a Multi-Site Solution with Camaleon CMS & Heroku
 layout: post
 ---
 
-To setup a multi-site solution with Camaleon CMS on Heroku is a great way to manage & run multiple client sites from a single CMS-installation. Since this process can be a bit tricky I outline the important steps & configuration details below - focussing on the Multi-Site setup rather than the installation:  
+To setup a multi-site solution with Camaleon CMS on Heroku is a great way to manage & run multiple client sites from a single CMS-installation. Since this process can be a bit tricky I outline the important steps & configuration details below - focussing on the Multi-Site setup rather than the installation and deployment details:  
 
 1. Local: Create a new Rails App, Install Camaleon CMS 
 
-Camaleon CMS is an awesome open source CMS that can be easily installed as a Ruby gem - the installation process is quite forward - simply head over to the repo for installation details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
+Camaleon CMS is an awesome open source CMS that can be easily installed as a Ruby gem - the installation process is quite forward - simply head over to the github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
 
 2. Edit config.json 
 
-How do I create and assign users to specific sites only 
+
+How do I create and assign users to specific sites only t
+
+Camaleon CMS offers advanced User Management. You can create & share CMS-users across Sites or you can assign CMS-users to specific Sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the `config/system.json`-file (??that was created when you run the `rails generate camaleon_cms:install` generator during the CMS-installation process??) accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
+
+`
+// config/system.json
+// Note: after any change in this file, you need to restart your server to apply changes.
+
+{
+  "share_sessions": false, // (boolean) share user sessions between subdomains of base_domain (only relevant if users_share_sites = true)
+  "default_user_role": "client", // default user role for all new users
+  "users_share_sites": false, //(boolean) true: permit to share users between sites, false: All users are assigned to a unique site. (Only change before installation)
+  "db_prefix": "cama_", // prefix name for database tables
+  "relative_url_root": "", // URL prefix, for example to get http://localhost:3000/blog/, this should be "blog"
+  "hooks": {}
+}
+`
 
 3. Local: Start server, setup Camaleon CMS + create a couple of Sites 
 
