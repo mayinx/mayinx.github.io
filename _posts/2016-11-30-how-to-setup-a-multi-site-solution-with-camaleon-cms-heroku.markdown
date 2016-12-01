@@ -16,7 +16,7 @@ Edit config.json
 
 Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles () & either share them across all Sites of the CMS-installation - or you can assign CMS-users to specific Sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the `config/system.json`-file (??that was created when you run the `rails generate camaleon_cms:install` generator during the CMS-installation process??) accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:    
 
-`
+```javascript
 // config/system.json
 // Note: after any change in this file, you need to restart your server to apply changes.
 
@@ -28,7 +28,7 @@ Camaleon CMS offers advanced role-based User Management. You can create CMS-user
   "relative_url_root": "", // URL prefix, for example to get http://localhost:3000/blog/, this should be "blog"
   "hooks": {}
 }
-`
+```
 
 Local: Start server, setup Camaleon CMS + create a couple of Sites 
 ------
