@@ -4,12 +4,15 @@ title: How to setup a Multi-Site Solution with Camaleon CMS & Heroku
 layout: post
 ---
 
-To setup a multi-site solution with Camaleon CMS on Heroku is a great way to manage & run multiple client sites from a single CMS-installation. Since this process can be a bit tricky I outline the important steps & configuration details below - focussing on the Multi-Site setup rather than the installation and deployment details:  
+# How to setup a multi site solution with Camaleon CMS on Heroku
+------
+
+Setting up a multi-site solution with Camaleon CMS on Heroku is a great way to manage & run multiple client sites from a single CMS-installation. Since this process can be a bit tricky I outline the important steps & configuration details below - focussing on the Multi-Site setup rather than the installation and deployment details:  
 
 Local: Create a new Rails App, Install Camaleon CMS 
 ------
 
-Camaleon CMS is an awesome open source CMS (released under the MIT License) that can be easily installed as a Ruby gem - the installation process is quite forward - simply head over to the github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
+Camaleon CMS is an awesome open source Rails-CMS (released under the MIT License) that can be easily installed as a Ruby gem. The installation process is quite forward - simply head over to the Camaleon CMS-Github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
 
 Edit config.json
 ----
@@ -42,13 +45,18 @@ If you did setup everything fine, you should see <....>. <....>. Play a bit with
 
 4. Local: Push your new app to heroku 
 
-Now it's time to push your Raisl app to heroku ...
+Now that you verified everything locally it's time to push your Rails app to heroku ...
 
-5. Setup a custom domain for your heroku app & enable wildcard subdomains 
+### Setup a custom domain for your heroku app & enable wildcard subdomains 
+------
 
-a) Domain-Registrar   
+a) DNS-Settings / Domain-Registrar   
 
-First of all we need to map your custom domain (let's call it `www.mydomain.com` ) to your Heroku app (`myapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.mydomain.de ` ). For this to work you need to change the DNS-settings of `mydomain.com`. Depending where you registered your domain, this process may differ. 
+First of all we need to map your custom domain (let's call it `www.mydomain.com` ) to your Heroku app (`myapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.mydomain.de ` ). For this to work you need to change the DNS-settings of `mydomain.com`. Depending on where you registered your domain, this process may differ, since not every Service permits you to perform the necessary DNS-Setttings. 
+
+If you registered your domain with an awesome service like DNSimple for instance allwos you to make all the necessary settings 
+Our name says it all: 
+because  If you use an awsome service like DNSimple your are all set 
 
 If you registered your domain with a registra taht doesn't alalow 
 you can edit it's DNS-settings or not.  The latter will allow to    
