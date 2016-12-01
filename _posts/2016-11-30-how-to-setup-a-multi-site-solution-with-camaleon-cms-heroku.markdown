@@ -52,23 +52,28 @@ Now that you verified everything locally it's time to push your Rails app to her
 
 a) DNS-Settings / Domain-Registrar   
 
-First of all we need to map your custom domain (let's call it `www.mydomain.com` ) to your Heroku app (`myapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.mydomain.de ` ). For this to work you need to change the DNS-settings of `mydomain.com`. Depending on where you registered your domain, this process may differ, since not every Service permits you to perform the necessary DNS-Setttings. 
+First of all we need to map your custom domain (let's call it `www.yourdomain.com` ) to your Heroku app (`yourapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.yourdomain.com ` ). For this to work you need to change the DNS-settings of `yourdomain.com` by creating CNAME records that point to your Heroku-app. Depending on where you registered your domain, this process may differ, since not every Service permits you to perform the necessary DNS-Setttings (in this case you must take a little detour) . 
 
-If you registered your domain with an awesome service like DNSimple for instance allwos you to make all the necessary settings 
+If you registered your domain with an awesome service like DNSimple the name says it all, because setting up the necessary CNAME records is pretty easy:
+
+- Login to your DNSimple Account and navigate to your Dashboard
+- from the dashboard open the record editor for your domain (by clicking the icon with the tooltoip "Jump to your DNS records" next to your domain name)   
+- Hit the "Add"-button and select CNAME from the appearing dropdown. To create a new CNAME record that maps `www.yourdomain.com` to `yourapp.herokuapp.com` simply enter `www` in the "Name"-form-field and the name of your heroku app (here `yourapp.herokuapp.com`) im the "Alias For"-form field.   
+
+(1 main-/default-site like www.mydomain.de+ n further sites accessible via subdomains/keys like fu.mydomain.de, bar.mydomain.de etc... )
+
+for instance allwos you to make all the necessary settings 
 Our name says it all: 
 because  If you use an awsome service like DNSimple your are all set 
 
 If you registered your domain with a registra taht doesn't alalow 
-you can edit it's DNS-settings or not.  The latter will allow to    
-
-
-(1 main-/default-site like www.mydomain.de+ n further sites accessible via subdomains/keys like fu.mydomain.de, bar.mydomain.de etc... )
 
 - Create an DNSimple-Account & register your domain with DNSimple 
 - Create 2 CNAME records for your freshly registered domain:
 
-CNAME 	www.ourschoolnet.de 	 =>   ourschoolnet.herokuapp.com 	
-CNAME 	*.ourschoolnet.de       =>    ourschoolnet.herokuapp.com 	
+Type	Name	Content
+CNAME 	www.yourdomain.com 	 =>   yourapp.herokuapp.com 	
+CNAME 	*.yourdomain.de       =>    yourapp.herokuapp.com 	
 
 
 - if your domain is hosted elsewhere (godaddy for example): Log into godaddy and change the names of the nameservers for your domain to the following:
