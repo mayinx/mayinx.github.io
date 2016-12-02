@@ -11,7 +11,7 @@ Setting up a multi-site solution with Camaleon CMS on Heroku is a great way to m
 
 ## Create a new Rails App & Install Camaleon CMS 
 
-Camaleon CMS is an awesome open source Rails-CMS (released under the MIT License) that can be easily installed as a Ruby gem. The installation process is quite forward - simply head over to the Camaleon CMS-Github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
+Camaleon CMS is an awesome open source Rails-CMS (released under the MIT License) that can be easily installed as a Ruby gem. The installation process is quite forward - simply head over to the Camaleon CMS-Github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/. But read on before you push your app to Heroku:
 
 Edit config.json
 ----
@@ -35,7 +35,7 @@ Camaleon CMS offers advanced role-based User Management. You can create CMS-user
 ## Local: Start server, setup Camaleon CMS + create a couple of Sites 
 
 
-Camaleon CMS has MultiSite-Support backed right in, so you don't need to take care of setting up virtual subdomain-based multi-tenancy in your Rails app <>. Thanks to this and domains like `lvh.me` or `smackaho.st` setting up & testing multiple sites locally is a breeze (though I think `smackaho.st` won't be accessible for ever because it won't be renewed by it's owner - we stick with `lvh.me` here).
+Camaleon CMS has MultiSite-Support backed right in, so you don't need to take care of setting up virtual subdomain-based multi-tenancy in your Rails app <>. Thanks to this and domains like `lvh.me` (the "successor" of `smackaho.st`) setting up & testing multiple sites locally is a breeze.
 
 So once installation is complete you simply `cd` into your app's dir, fire up your local server by typing `rails s` in your terminal + navigate to http://lvh.me:3000/ with your browser. `lvh.me` (lvh = local virtual host) is a domain which resolves to your local machine (i.e. `localhost` (`127.0.0.1`)) - and the same goes for all its potential subdomains (`*.lvh.me`). So everything from `lvh.me` itself to `[whateverfancysubdomainyoucanthinkof].lvh.me` points to `127.0.0.1`, which makes the usage of this domain the ideal solution for local subdomain testing - no need to mess around with etc/hosts etc. anymore (the only "downside" is the need of a internet-connection - but that should be a given nowadays).     
 
@@ -48,6 +48,7 @@ Now that you verified everything locally it's time to push your Rails app to her
 
 ## Setup a custom domain for your Heroku app & enable wildcard subdomains 
 
+Setting up a custom domain for your heroku app allows ... need a custom domain not only to make your app accessible via default heroku domain name (like yourapp.herokuapp.com) , but to enable wildcard sudomains as well.  ...   
 
 a) DNS-Settings / Domain-Registrar   
 
@@ -109,4 +110,5 @@ done!
 ## Sources
 
 - http://matthewhutchinson.net/2011/1/10/configuring-subdomains-in-development-with-lvhme
-- http://tbaggery.com/2010/03/04/smack-a-ho-st.html
+- https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain
+
