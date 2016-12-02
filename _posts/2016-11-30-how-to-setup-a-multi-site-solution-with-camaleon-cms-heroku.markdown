@@ -9,9 +9,7 @@ layout: post
 
 Setting up a multi-site solution with Camaleon CMS on Heroku is a great way to manage & run multiple client sites from a single CMS-installation. Since this process can be a bit tricky I outline the important steps & configuration details below - focussing on the Multi-Site setup rather than the installation and deployment details:  
 
-## Local: Create a new Rails App, Install Camaleon CMS 
-
-------
+## Create a new Rails App & Install Camaleon CMS 
 
 Camaleon CMS is an awesome open source Rails-CMS (released under the MIT License) that can be easily installed as a Ruby gem. The installation process is quite forward - simply head over to the Camaleon CMS-Github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/
 
@@ -34,8 +32,8 @@ Camaleon CMS offers advanced role-based User Management. You can create CMS-user
 }
 ```
 
-Local: Start server, setup Camaleon CMS + create a couple of Sites 
-------
+## Local: Start server, setup Camaleon CMS + create a couple of Sites 
+
 
 Camaleon CMS has MultiSite-Support backed right in, so you don't need to take care of setting up virtual subdomain-based multi-tenancy in your Rails app <>. Thanks to this and domains like `lvh.me` or `smackaho.st` setting up & testing multiple sites locally is a breeze (though I think `smackaho.st` won't be accessible for ever because it won't be renewed by it's owner - we stick with `lvh.me` here).
 
@@ -44,22 +42,26 @@ So once installation is complete you simply `cd` into your app's dir, fire up yo
 If you did setup everything fine, you should see <....>. <....>. Play a bit with Camaleon CMS to get aquainted with the CMS. Navigate to <....> to create a couple of sites and use sudomains as keys (slug) - let's say `fubar` and `barfu`. If you navigate to http://fubar.lvh.me:3000/ and http://barfu.lvh.me:3000/ you should see 2 different sites.    
 
 
-4. Local: Push your new app to heroku 
+## Local: Push your new app to heroku 
 
 Now that you verified everything locally it's time to push your Rails app to heroku ...
 
-### Setup a custom domain for your heroku app & enable wildcard subdomains 
-------
+## Setup a custom domain for your Heroku app & enable wildcard subdomains 
+
 
 a) DNS-Settings / Domain-Registrar   
 
-First of all we need to map your custom domain (let's call it `www.yourdomain.com` ) to your Heroku app (`yourapp.herokuapp.com`) and enable wildcard subdomains for this domain (` *.yourdomain.com ` ). For this to work you need to change the DNS-settings of `yourdomain.com` by creating CNAME records that point to your Heroku-app. Depending on where you registered your domain, this process may differ, since not every Service permits you to perform the necessary DNS-Setttings (in this case you must take a little detour) . 
+First of all we need to map your custom domain (let's call it `www.yourdomain.com` ) to your Heroku app (`yourapp.herokuapp.com`) and enable wildcard subdomains for this domain (`*.yourdomain.com`) which must resolve to your Heroku-app as well. For this to work you need to change the DNS-settings of `yourdomain.com` by creating so called "CNAME" records that point to your Heroku-app. A CNAME record simply aliases a subdomain (but not the root domain itself!) to another host. The root (or naked) domain in ou example is yourdomain.com - and the term subdomain covers everything that might be prepended to this root domain, be it `www` (`www.yourdomain.com`) or any other subdomain you can think of (`*.yourdomain.com`). The process of mapping your domain's subdomains to your heroku app via CNAME records may differ depending on where you registered your domain, since not every Service permits you to perform the necessary DNS-Setttings (in this case you must take a little detour) . 
+
+Sceanrio a) Domain Service / Registrar permits CNAME-Records
+------
 
 If you registered your domain with an awesome service like DNSimple the name says it all, because setting up the necessary CNAME records is pretty easy:
 
 - Login to your DNSimple Account and navigate to your Dashboard
 - from the dashboard open the record editor for your domain (by clicking the icon with the tooltoip "Jump to your DNS records" next to your domain name)   
-- Hit the "Add"-button and select CNAME from the appearing dropdown. To create a new CNAME record that maps `www.yourdomain.com` to `yourapp.herokuapp.com` simply enter `www` in the "Name"-form-field and the name of your heroku app (here `yourapp.herokuapp.com`) im the "Alias For"-form field.   
+- Hit the "Add"-button and select "CNAME" from the appearing dropdown. To create a new CNAME record that maps `www.yourdomain.com` to `yourapp.herokuapp.com` simply enter `www` in the "Name"-form-field and the name of your Heroku-app (here in our example `yourapp.herokuapp.com`) im the "Alias For"-form field; you can see the effects of your input in the little preview box on the right - if that box says "www.yourdomain.com resolves to youapp.herokuapp.com" everything's fine and you can hit "Create Record" (see illu).
+- Repeat the last step to create another CNAME record for all potential subdomains of `yourdomain.com` (`*.yourdomain.de`)
 
 (1 main-/default-site like www.mydomain.de+ n further sites accessible via subdomains/keys like fu.mydomain.de, bar.mydomain.de etc... )
 
