@@ -53,23 +53,21 @@ The following assumes that you have registered a domain already that you wish to
 
 a) DNS-Settings / Domain-Registrar   
 
-We need to map your custom root domain and it's subdomains to your Heroku app (i.e. your app's default Heroku domain name which funtions as DNS Target - e. g. `yourapp.herokuapp.com`). The root (or naked) custom domain in our example is `yourdomain.com` - and the term subdomain covers everything that might be prepended to this root domain, be it `www` (like in `www.yourdomain.com`) or any other subdomain you can think of (in wildcard notation: `*.yourdomain.com`). So all in all we have to create 3 DNS records. 1 for your custom root domain, one for the sub-domain www and one for all possible subdomains. 
+We need to map your custom root domain and it's subdomains to your Heroku app (i.e. your app's default Heroku domain name which funtions as DNS Target - e. g. `yourapp.herokuapp.com`). The root (or naked) custom domain in our example is `yourdomain.com` - and the term subdomain covers everything that might be prepended to this root domain, be it `www` (like in `www.yourdomain.com`) or any other subdomain you can think of (in "wildcard notation": `*.yourdomain.com`). So all in all we have to create 3 DNS records: 1 for your custom root domain, 1 for its subdomain `www` and 1 "catch-all"/wildcard-record for all its other possible but non existing subdomains. 
+
+Depending on where you registered &/ host your domain or what service-plan you chosse, the process of mapping your root domain and its subdomains to your Heroku app via DNS-records may differ - as well as the types of DNS-records you must use. Some DNS providers for example offer so called ALIAS-records for the mapping of root domains to a specific DNS-Target (like DNSimpel or PointDNS), others utilize ANAME- or CNAME-records for this task (see the Heroku Dev Center for an overiew: https://devcenter.heroku.com/articles/custom-domains#configuring-dns-for-root-domains or simply check with your provider). And to resolve www and wildcard subdomains to your Heroku-app, you need to create 2 CNAME-records, one of them a so called wildcard DNS record - a record type that's not supported by every Service. So in the worst case the creation of the desired mapping seems even "impossible", since not every Service / Provider permits you to perform the necessary DNS-Settings (see GoDaddy for instance) - but no worries: If that's the case you must take a "little detour" (covered below), that's all. 
 
 
-Let's start with the sudomains: To resolve www and wildcard subdomains to your Heroku-app, you need to change the DNS-settings of `yourdomain.com` by creating so called "CNAME"-records that point to your Heroku-app. A CNAME record simply aliases a subdomain (but in most cases not the root domain itself) to another host. 
-The process of mapping your domain's subdomains to your heroku app via CNAME records may differ depending on where you registered your domain - or even "impossible", since not every Service permits you to perform the necessary DNS-Setttings (but no worries - if that's the case you must take a little detour, that's all). 
-
-Sceanrio a) Domain Service / Registrar permits CNAME-Records
+Sceanario a) Domain Service / Registrar permits CNAME-Records inkl. WildCard-records (e.g. DNSimple)
 ------
 
-For this example we use DNSimple: 
-If you registered your domain with an awesome service like DNSimple the name really says it all, because setting up the necessary CNAME records is indeed pretty simple:
+If you host your domain with an awesome service like DNSimple the name really says it all, because setting up the necessary DNS-records is indeed pretty simple:
 
 - Login to your DNSimple Account and navigate to your Dashboard
 - from the dashboard open the record editor for your domain (by clicking the icon with the tooltip "Jump to your DNS records" next to your domain name)
-- Map your custom root domain to your heroku-app: Hit the Add-button and select "ALIAS". In the appearing form just fill in the "Alias For"-form field with the your default heroku domain name (here in our example `yourapp.herokuapp.com`) and leave the "Name"-form field blank.   
-- Hit the "Add"-button and select "CNAME" from the appearing dropdown. To create a new CNAME record that maps `www.yourdomain.com` to `yourapp.herokuapp.com` simply enter `www` in the "Name"-form-field and the default heroku domain name  (here in our example `yourapp.herokuapp.com`) im the "Alias For"-form field; you can see the effects of your input in the little preview box on the right - if that box says something like "www.yourdomain.com resolves to youapp.herokuapp.com" everything's fine and you can hit "Create Record" (see illu).
-- Repeat the previous step to create another CNAME record that maps all potential subdomains of `yourdomain.com` (`*.yourdomain.de`) to your heroku default domain - but this time enter the wildcard subdomain notation (`*`) in the "Name"-form-field (the "Alias For"-field get's the same input than before: `yourapp.herokuapp.com`) - the preview box should now read something like "`*.yourdomain.com` resolves to `youapp.herokuapp.com`"
+- **Mapping root domain:** Map your custom root domain to your heroku-app: Hit the Add-button and select "ALIAS". In the appearing form just fill in the "Alias For"-form field with the your default heroku domain name (here in our example `yourapp.herokuapp.com`) and leave the "Name"-form field blank.   
+- **Mapping `www`-subdomain domain:** ... A CNAME record simply aliases a subdomain to another host. .. Hit the "Add"-button and select "CNAME" from the appearing dropdown. To create a new CNAME record that maps `www.yourdomain.com` to `yourapp.herokuapp.com` simply enter `www` in the "Name"-form-field and the default heroku domain name  (here in our example `yourapp.herokuapp.com`) im the "Alias For"-form field; you can see the effects of your input in the little preview box on the right - if that box says something like "www.yourdomain.com resolves to youapp.herokuapp.com" everything's fine and you can hit "Create Record" (see illu).
+- **Mapping wildcard subdomain:** Repeat the previous step to create another CNAME record that maps all potential / non existing subdomains of `yourdomain.com` (`*.yourdomain.com`) to your heroku default domain - but this time enter the wildcard subdomain notation `*` (asterisk) in the "Name"-form-field (the "Alias For"-field get's the same input than before: `yourapp.herokuapp.com`) - the preview box should now read something like "`*.yourdomain.com` resolves to `youapp.herokuapp.com`"
 
 
 That's it. If you navigate to ... you should see now the following records:
@@ -130,4 +128,5 @@ done!
 
 - http://matthewhutchinson.net/2011/1/10/configuring-subdomains-in-development-with-lvhme
 - https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain
+- https://en.wikipedia.org/wiki/Wildcard_DNS_record
 
