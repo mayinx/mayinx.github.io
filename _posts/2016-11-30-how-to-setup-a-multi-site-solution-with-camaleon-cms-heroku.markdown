@@ -51,14 +51,14 @@ Now that you verified everything locally it's time to push your Rails app to her
 Setting up a custom domain for your heroku app allows ... need a custom domain not only to make your app accessible via default heroku domain name (like yourapp.herokuapp.com) , but to enable wildcard sudomains as well.  ...  
 The following assumes that you have registered a domain already that you wish to use a custom doamin for your heroku app.   
 
-a) DNS-Settings / Domain-Registrar   
+### a) DNS-Settings (Domain-Registrar / DNS Provider)   
 
 We need to map your custom root domain and it's subdomains to your Heroku app (i.e. your app's default Heroku domain name which funtions as DNS Target - e. g. `yourapp.herokuapp.com`). The root (or naked) custom domain in our example is `yourdomain.com` - and the term subdomain covers everything that might be prepended to this root domain, be it `www` (like in `www.yourdomain.com`) or any other subdomain you can think of (in "wildcard notation": `*.yourdomain.com`). So all in all we have to create 3 DNS records: 1 for your custom root domain, 1 for its subdomain `www` and 1 "catch-all"/wildcard-record for all its other possible but non existing subdomains. 
 
-Depending on where you registered &/ host your domain or what service-plan you chosse, the process of mapping your root domain and its subdomains to your Heroku app via DNS-records may differ - as well as the types of DNS-records you must use. Some DNS providers for example offer so called ALIAS-records for the mapping of root domains to a specific DNS-Target (like DNSimpel or PointDNS), others utilize ANAME- or CNAME-records for this task (see the Heroku Dev Center for an overiew: https://devcenter.heroku.com/articles/custom-domains#configuring-dns-for-root-domains or simply check with your provider). And to resolve www and wildcard subdomains to your Heroku-app, you need to create 2 CNAME-records, one of them a so called wildcard DNS record - a record type that's not supported by every Service. So in the worst case the creation of the desired mapping seems even "impossible", since not every Service / Provider permits you to perform the necessary DNS-Settings (see GoDaddy for instance) - but no worries: If that's the case you must take a "little detour" (covered below), that's all. 
+Depending on where you registered &/ host your domain or what service-plan you choose, the process of mapping your root domain and its subdomains to your Heroku app via DNS-records may differ - as well as the types of DNS-records you must use. Some DNS providers for example offer so called ALIAS-records for the mapping of root domains to a specific DNS-Target (like DNSimpel or PointDNS), others utilize ANAME- or CNAME-records for this task (see the Heroku Dev Center for an overiew: https://devcenter.heroku.com/articles/custom-domains#configuring-dns-for-root-domains or simply check with your provider). And to resolve www and wildcard subdomains to your Heroku-app, you need to create 2 CNAME-records, one of them a so called wildcard DNS record - a record type that's not supported by every Service. So in the worst case the creation of the desired mapping seems "impossible" on first sight, since not every Service / Provider permits you to perform the necessary DNS-Settings (see GoDaddy for instance) - but no worries: If that's the case you must take a "little detour", that's all. Using DNSimple and GoDaddy as an example both scenarios are covered below : 
 
 
-Sceanario a) Domain Service / Registrar permits CNAME-Records inkl. WildCard-records (e.g. DNSimple)
+#### Sceanario a) Your Domain Service / Registrar permits CNAME-Records inkl. WildCard-records (e.g. DNSimple)
 ------
 
 If you host your domain with an awesome service like DNSimple the name really says it all, because setting up the necessary DNS-records is indeed pretty simple:
@@ -89,36 +89,73 @@ And if that wasn't easy enough, DNSimple offers a special "One click service"   
 On top of that, we map  
 
 
-Sceanrio a) Domain Service / Registrar doesn't permit CNAME-Records
+#### Sceanrio b) Your Domain Registrar doesn't permit necessary DNS Settings like CNAME- incl. Widlcard-Records etc. (e.g. GoDaddy)
 
-If you registered your domain with a registrar / service that doesn't allow you to add CNAME records  
-
-
-
-
-
-- if your domain is hosted elsewhere (godaddy for example): Log into godaddy and change the names of the nameservers for your domain to the following:
+If you registered your domain with a registrar that doesn't allow you to add the necessary DNS records (like GoDaddy), you can either transfer your domain completely to a DNS Provider that does (like DNSimple) - or you can just transfer the hosting of your domain to such a provider. The latter means: Your registrar stays your registrar but your domain will no longer be hosted by this registrar - instead it will be hosted by another DNS Provider, who's domain services you want to use. This can be done by switching to the name servers of the Provider who shall host your domain. If you'd like to to transfer hosting from GoDaddy to DNSimple for example, follow these steps: 
+    
+**GoDaddy**    
+- Log into your GoDaddy-Account and select your domain from the dashboard ...  
+- select ....
+- and change the names of the nameservers for your domain to the following:
 
     ns1.dnsimple.com 
     ns2.dnsimple.com
     ns3.dnsimple.com
     ns4.dnsimple.com
   
-b) Heroku
--  Add your domain to tell Heroku to route requests for your domain to your app:
-$ heroku domains:add www.ourschoolnet.de --app ourschoolnet
+- Hit OK and you're done (but it could take some time - up to 24 hours - until the changes propagate ....)    
 
-- Set subdomains (wildcard to catch all subdomains)
-$ heroku domains:add *.ourschoolnet.de  --app ourschoolnet
+**DNSimple**
 
-- verify: Check out domains
-$ heroku domains --app ourschoolnet
+- Log into your DNSimple-Account and select "+ Add domain" from your dashboard ... 
+- You are presented with 3 options - select "Use domain services" to use DNSimple's domain services while keeping your domain at your current registrar
+- Enter the name of your domain in the appearing form and hit the button "Use domains services"
+- Now check the Domain resolution of your freshly added domain - select the domain from your dashboard and check the entries under Domain > Domain resoulution (you may have to hit the "Refresh"-button): If you see the previously (via GoDaddy) entered name servers (ns1.dnsimple.com, ns2.dnsimpel.com etc.) followed by the message "Your domain is resolving with DNSimple’s name servers." you're all set. If that's not the case: Relax & remember - it make take some time until the name server changes you performed earlier propagate...  
+- Once the Domain is resolving correctly you can start using DNSimple's Domain Services and create the necessary DNS-records for your domain as described above under Scenario a) ...    
+
+ 
+
+
+  
+### b) Add custom root & subdomains to Heroku app
+
+Now all that's left to be donmme is to tell tell Heroku to route requests for your domain to your app - by adding your custom root domain and its subdomains (www + wildcard). Fire up a terminal and issue the following commands (alternatively you can log in to your Heroku-Account and add your domain via the web interface):  
+
+-  Add your cutom root domain:
+$ heroku domains:add yourdomain.com --app yourapp
+
+-  Add www subdomain:
+$ heroku domains:add www.yourdomain.com --app yourapp
+
+- Add wildcard subdomain 
+$ heroku domains:add *.yourdomain.com  --app yourapp
+
+The first two commands ensure, that every request to youdomain.com or www.yourdomain.com is resolved to your heroku app - this equals your Camaleon app's main site. The last command makes sure you can use virtual subdomains with your Camaleon app and thus support multiple personalized client sites. But that's not the only reason you should never forget to add widcard subdomains to your heroku app, if you created a corresponding wildcard DNS record via your DNS Provider: As the heroku dev center article stresses (https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain), "a malicious person could add" something like `baddomain.youdomain.com` "to their Heroku app and receive traffic intended for your application" if you forget to add the wildcard subdomain to your heroku app....  
+
+
+Test
+
+
+First you should use the terminal again to verify that everything is setup correctly:   
+
+`$ heroku domains --app yourapp`
+
+You should get something like this as response:
+
+`Domain Name`           `DNS Target`
+────────────────────  ───────────────────
+`youdomain.com`             `yourapp.herokuapp.com`
+`www.youdomain.com`         `yourapp.herokuapp.com`
+`*.youdomain.com`           `yourapp.herokuapp.com`
+
+
+If you messed up things you can remove domains from your heroku app again via the following comamnds:
 
 - to remove a specific domain:
-$ heroku domains:remove www.ourschoolnet.com --app school-net-upgrade-cedar
+$ heroku domains:remove www.yourdomain.com  --app yourapp
 
 - or to clear all domains at once:
-$ heroku domains:clear --app school-net-upgrade-cedar
+$ heroku domains:clear --app yourapp
 
 done!
 
@@ -129,4 +166,5 @@ done!
 - http://matthewhutchinson.net/2011/1/10/configuring-subdomains-in-development-with-lvhme
 - https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain
 - https://en.wikipedia.org/wiki/Wildcard_DNS_record
+- https://support.dnsimple.com/articles/delegating-dnsimple-hosted/ 
 
