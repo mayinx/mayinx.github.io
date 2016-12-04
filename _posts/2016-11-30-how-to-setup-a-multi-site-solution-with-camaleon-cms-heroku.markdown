@@ -86,7 +86,7 @@ CNAME	www.ourschoolnet.de	example.com.herokudns.com
 
 And if that wasn't easy enough, DNSimple offers a special "One click service"   .... that's handling this for you.
 
-On top of that, we map  
+ 
 
 
 #### Sceanrio b) Your Domain Registrar doesn't permit necessary DNS Settings like CNAME- incl. Widlcard-Records etc. (e.g. GoDaddy)
@@ -98,12 +98,15 @@ If you registered your domain with a registrar that doesn't allow you to add the
 - select ....
 - and change the names of the nameservers for your domain to the following:
 
-    ns1.dnsimple.com 
+```
+    ns1.dnsimple.com 
     ns2.dnsimple.com
     ns3.dnsimple.com
     ns4.dnsimple.com
-  
-- Hit OK and you're done (but it could take some time - up to 24 hours - until the changes propagate ....)    
+```
+
+- Hit OK and you're done here (but it could take some time - up to 24 hours - until the changes propagate ....)    
+
 
 **DNSimple**
 
@@ -121,14 +124,14 @@ If you registered your domain with a registrar that doesn't allow you to add the
 
 Now all that's left to be donmme is to tell tell Heroku to route requests for your domain to your app - by adding your custom root domain and its subdomains (www + wildcard). Fire up a terminal and issue the following commands (alternatively you can log in to your Heroku-Account and add your domain via the web interface):  
 
--  Add your cutom root domain:
-$ heroku domains:add yourdomain.com --app yourapp
+**Add your cutom root domain**
+`$ heroku domains:add yourdomain.com --app yourapp`
 
--  Add www subdomain:
-$ heroku domains:add www.yourdomain.com --app yourapp
+**Add www subdomain**
+`$ heroku domains:add www.yourdomain.com --app yourapp`
 
-- Add wildcard subdomain 
-$ heroku domains:add *.yourdomain.com  --app yourapp
+**Add wildcard subdomain** 
+`$ heroku domains:add *.yourdomain.com  --app yourapp`
 
 The first two commands ensure, that every request to youdomain.com or www.yourdomain.com is resolved to your heroku app - this equals your Camaleon app's main site. The last command makes sure you can use virtual subdomains with your Camaleon app and thus support multiple personalized client sites. But that's not the only reason you should never forget to add widcard subdomains to your heroku app, if you created a corresponding wildcard DNS record via your DNS Provider: As the heroku dev center article stresses (https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain), "a malicious person could add" something like `baddomain.youdomain.com` "to their Heroku app and receive traffic intended for your application" if you forget to add the wildcard subdomain to your heroku app....  
 
@@ -151,11 +154,12 @@ You should get something like this as response:
 
 If you messed up things you can remove domains from your heroku app again via the following comamnds:
 
-- to remove a specific domain:
-$ heroku domains:remove www.yourdomain.com  --app yourapp
+**to remove a specific domain**
+`$ heroku domains:remove www.yourdomain.com  --app yourapp`
 
-- or to clear all domains at once:
-$ heroku domains:clear --app yourapp
+**or to clear all domains at once**
+`$ heroku domains:clear --app yourapp`
+
 
 done!
 
