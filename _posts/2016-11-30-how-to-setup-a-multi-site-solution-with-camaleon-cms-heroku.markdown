@@ -145,12 +145,13 @@ First you should use the terminal again to verify that everything is setup corre
 
 You should get something like this as response:
 
-`Domain Name`           `DNS Target`
+```
+Domain Name            DNS Target
 ────────────────────  ───────────────────
-`youdomain.com`             `yourapp.herokuapp.com`
-`www.youdomain.com`         `yourapp.herokuapp.com`
-`*.youdomain.com`           `yourapp.herokuapp.com`
-
+youdomain.com          yourapp.herokuapp.com
+www.youdomain.com      yourapp.herokuapp.com
+*.youdomain.com        yourapp.herokuapp.com
+```
 
 If you messed up things you can remove domains from your heroku app again via the following comamnds:
 
