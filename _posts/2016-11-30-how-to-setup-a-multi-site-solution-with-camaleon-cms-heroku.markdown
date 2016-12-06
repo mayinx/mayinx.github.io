@@ -77,7 +77,12 @@ ALIAS	  yourdomain.com	      => yourapp.herokuapp.com
 CNAME 	www.yourdomain.com 	 =>   yourapp.herokuapp.com 	
 CNAME 	*.yourdomain.de       =>    yourapp.herokuapp.com 	
 
-
+Type | Name | Content/DNS-Target
+------------ | ------------- | ------------- 
+`ALIAS` | `yourdomain.com` | `yourapp.herokuapp.com`	 
+`CNAME` | `www.yourdomain.com` | `yourapp.herokuapp.com`		  
+`CNAME` | `*.yourdomain.de` | `yourapp.herokuapp.com`
+ 
 
 
 ALIAS	ourschoolnet.de	example.com.herokudns.com
