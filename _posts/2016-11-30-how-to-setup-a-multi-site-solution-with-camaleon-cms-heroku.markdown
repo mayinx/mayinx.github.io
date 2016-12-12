@@ -1,4 +1,4 @@
----
+it---
 published: false
 title: How to Setup a Multisite application with Camaleon CMS on Heroku  
 layout: post
@@ -7,15 +7,13 @@ layout: post
 
 ## The goal: Multiple Sites - & just one CMS-Installation to rule them all
 
-Camaleon CMS is an awesome open source Rails-CMS (released under the MIT License) which supports multisite apps out of the box. A Camaleon multisite app allows you to create, run & manage multiple sites - each accessible via a dedicated web address - with just one CMS-Installation. This means you can utilize 1 Camaleon Rails App to serve `n` sites for `n` different customers (Corp A, Corp B... Corp N) - or to serve `n` sites for the same customer (e.g. one site for a corporation's regular website, 1 for their blog, 1 for .. etc.).
+Camaleon CMS is an awesome open source Rails-CMS which is released under the MIT License and supports multisite apps out of the box. A Camaleon multisite app allows you to create, run & manage multiple independent sites - each accessible via a dedicated web address - with just one CMS-Installation. This means you can utilize 1 Camaleon Rails App to serve `n` sites for `n` different customers (Corp A, Corp B... Corp N) - or to serve `n` sites for the same customer (e.g. one site for a corporation's regular website, 1 for their blog, 1 for their shop etc...).
 
-### How does it work? / How does a Camaleon Multisite App work?
+### Quick n dirty: How does a Camaleon Multisite App work?
 
 To make this possible, each site of a Camaleon multisite app reveives a unique site-key - a string that functions as humnan readable id (or "slug" in Rails-parlor) which is stored in the DB. This key is used to identify each site and to create a dedicated web address for each site, wherein the site key acts as virtual subdomain of your app's root domain:
 
-Given your app is accessible via the url `www.[mydomain].com`, then a site with the site-key `fubar` would be accessible via the url `fubar.[yourdomain].com`, another site with the site-key `acme-corp` via `acme-corp.[yourdomain].com` and so forth... So if a Camelon Multisite app receives a  GET-request for `fubar.[yourdomain].com`, Camaleon extracts the virtual subdomain `fubar` from the request url and uses it as site-key / slug for a DB-lookup. If the Site was found, the contents associated with this site (DB-contents, view-templates, layouts, styles etc.) are retrieved and served to the client. The same goes for the request `acme-corp.[yourdomain].com`, which results in a DB-lookup for a site with the key `acme-corp` etc. Requests for the root domain `[mydomain].com` are routet to the default-/main-site that's created when you set up the CMS for the first time.  
-
- Of course it's possible to map custom domains to those virtual subdomains ...    
+Given your app is accessible via the url `www.[mydomain].com`, then a site with the site-key `fubar` would be accessible via the url `fubar.[yourdomain].com`, another site with the site-key `acme-corp` via `acme-corp.[yourdomain].com` and so forth... So if a Camelon Multisite app receives a  GET-request for `fubar.[yourdomain].com`, Camaleon extracts the virtual subdomain `fubar` from the request url and uses it as site-key / slug for a DB-lookup for this site. If the Site was found, its associated contents (DB-contents, view-templates, layouts, styles etc.) are retrieved and served to the client. The same goes for the request `acme-corp.[yourdomain].com`, which results in a DB-lookup for a site with the key `acme-corp` etc. All requests for the root domain `[mydomain].com` are routet to the default-/main-site that's created when you set up the CMS for the first time.  
 
 
 ## Why Multisite apps?
@@ -32,13 +30,12 @@ Multisite apps came with numerous benefits:
 - http://stackoverflow.com/questions/7003024/multi-tenant-rails-application-what-are-the-pros-and-cons-of-different-techniqu
 
 - http://blog.elbowroomstudios.com/zero-to-multitenant-in-15-minutes-a-rails-walkthrough/
-
-
+- https://www.elegantthemes.com/blog/resources/the-complete-guide-to-creating-a-wordpress-multisite-installation
+- https://www.web-savvy-marketing.com/2012/02/wordpress-multisite/
+- https://www.isaumya.com/advantages-of-wordpress-multisite-how-to-create-one/
+- https://torquemag.io/2013/03/6-multisite/
 
 # Setup a Camaleon multisite app
-
-
-
 
 ## Where we’re headed
 
@@ -48,16 +45,89 @@ Before we deploy the app to Heroku we're going to perform the necessary steps to
 
 After that's accomplished we are going to fulfill another requirement: Each site shall be accessible not only via the default url (i.e. via the `virtualsubdomain.[yourdomain].com`-notation, e.g. `fubar.[yourdomain].com`) but also via a custom domain (e.g. `fubar-corp.com`). To accomplish this we will perform the necessary DNS- and Heroku-settings and implement a SiteHelper in your app that maps your clients custom domains to the correct Camaleon::Site-instance.      
 
-Since there are excellent resources concerning ionstalaltion and dployment of Camaleon Apps available (see below), This tutorial will set the focus on the multisite setup (i.e. DNS-, Heroku- & Appp-settings) rather than the installation and deployment details.
+Sidenote: Since there are excellent resources concerning installation and deployment of Camaleon Apps available (see below), this tutorial will set the focus on the multisite setup (i.e. DNS-, Heroku- & Appp-settings) rather than the installation and deployment details.
 
-# 1. Create a new Rails App, Install Camaleon CMS & Setup Multisite Locally
+## Prerequisites
+
+Camaleon CMS is distributed as Ruby gem ready to be installed in Rails-Applications. So this tutorial assumes that you are familiar with the Web Application Framework Ruby on Rails and the Ruby gem-ecosystem - if that's not the case head over to [RailsHuides: Getting Started with Rails](http://guides.rubyonrails.org/getting_started.html) (or use another of the numerous excellent resources on this subject that are available online).
+
+Camaleon CMS itself has the following requirements:
+
+- Rails 4.1+
+- MySQL 5+ or SQlite or PostgreSQL
+- Ruby 1.9.3+
+- Imagemagick
+
+Make sure to visit the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for possible updates on the requirements...
+
+# 1. Setup a Camelon Multisite App Locally
+
+## Create a new Rails-App
+
+Open a terminal window and create a new rails app named `multisiteapp` (or whatever name you prefer):
+
+```sh  
+~/projects$ rails new multisiteapp
+```
+
+After the new application was successfully created `cd` into the new app's dir and fire up the local web server:
 
 
-Camaleon CMS can be easily installed as a Ruby gem. The installation process is quite forward - simply head over to the Camaleon CMS-Github-repo for details: https://github.com/owen2345/camaleon-cms#installation. Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: https://www.sitepoint.com/up-and-running-with-camaleon-cms/. But read on before you push your app to Heroku:
+```sh  
+~/projects$ cd multisiteapp
+~/projects/multisiteapp$ rails server
+```
+
+Open a browser and visit http://localhost:3000/  - if you see the rails welcome page you are good...
+
+
+##  Install Camaleon CMS
+
+Camaleon CMS can be easily installed as a Ruby gem, so the installation process is quite forward (but check the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for details and updates): Simply add the gem to your new app's Gemfile (located in `[yourrailsapp]/Gemfile` - e.g. `multisiteapp/Gemfile`) and use the terminal to run `bundle install` from your apps root directory:
+
+
+**Gemfile**
+```ruby  
+# Gemfile
+source 'https://rubygems.org'
+
+ruby "2.1.2"
+gem 'rails', '4.2.1'
+
+# ...
+# ...
+
+
+# Camaleon CMS is a dynamic and advanced content management system based on Ruby on Rails
+gem "camaleon_cms"
+
+# ...
+# ...
+
+```
+
+**Terminal**
+
+```sh  
+~/multisiteapp$ bundle install
+```
+
+Now it's time to run the `camaleon_cms:install`-generator that's provided by the Camaleon CMS-gem; among other essential  CMS-specific stuff it adds a certain config-file (`config/system.json`) to your Rails-app that's important for our multisite setup.  
+
+
+
+**Terminal**
+
+```sh  
+~/multisiteapp$ rails generate camaleon_cms:install
+```
+
+
+Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: [Up and Running with Camaleon CMS](https://www.sitepoint.com/up-and-running-with-camaleon-cms/). But read on before you push your app to Heroku:
 
 ## Edit config.json
 
-Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all Sites of the CMS-installation - or you can assign CMS-users to specific Sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the `config/system.json`-file (??that was created when you run the `rails generate camaleon_cms:install` generator during the CMS-installation process??) accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
+Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all Sites of the CMS-installation - or you can assign CMS-users to specific Sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the `config/system.json`-file (that was created when you run the `rails generate camaleon_cms:install` generator during the CMS-installation process) accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
 
 ```javascript
 // config/system.json
@@ -85,7 +155,7 @@ If you did setup everything fine, you should see <....>. <....>. Play a bit with
 
 # 2. Local: Push your new app to heroku
 
-Now that you verified everything locally it's time to push your Rails app to heroku ...
+Now that you verified everything locally it's time to push your Rails app to heroku - again, see resources like if you get stuck  ...
 
 # 3. Setup a custom domain for your Heroku app & enable wildcard subdomains
 
@@ -96,13 +166,13 @@ The following assumes that you have registered a domain already that you wish to
 
 We need to map your custom root domain and it's subdomains to your Heroku app (i.e. your app's default Heroku domain name which funtions as DNS Target - e. g. `yourapp.herokuapp.com`). The root (or naked) custom domain in our example is `yourdomain.com` - and the term subdomain covers everything that might be prepended to this root domain, be it `www` (like in `www.yourdomain.com`) or any other subdomain you can think of (in "wildcard notation": `*.yourdomain.com`). So all in all we have to create 3 DNS records: 1 for your custom root domain, 1 for its subdomain `www` and 1 "catch-all"/wildcard-record for all its other possible but non existing subdomains.
 
-Depending on where you registered &/ host your domain or what service-plan you choose, the process of mapping your root domain and its subdomains to your Heroku app via DNS-records may differ - as well as the types of DNS-records you must use. Some DNS providers for example offer so called ALIAS-records for the mapping of root domains to a specific DNS-Target (like DNSimpel or PointDNS), others utilize ANAME- or CNAME-records for this task (see the Heroku Dev Center for an overiew: https://devcenter.heroku.com/articles/custom-domains#configuring-dns-for-root-domains or simply check with your provider). And to resolve www and wildcard subdomains to your Heroku-app, you need to create 2 CNAME-records, one of them a so called wildcard DNS record - a record type that's not supported by every Service. So in the worst case the creation of the desired mapping seems "impossible" on first sight, since not every Service / Provider permits you to perform the necessary DNS-Settings (see GoDaddy for instance) - but no worries: If that's the case you must take a "little detour", that's all. Using DNSimple and GoDaddy as an example both scenarios are covered below :
+Depending on where you registered &/ host your domain or what service-plan you choose, the process of mapping your root domain and its subdomains to your Heroku app via DNS-records may differ - as well as the types of DNS-records you must use. Some DNS providers for example offer so called ALIAS-records for the mapping of root domains to a specific DNS-Target (like DNSimpel or PointDNS), others utilize ANAME- or CNAME-records for this task (see the Heroku Dev Center for an overiew: https://devcenter.heroku.com/articles/custom-domains#configuring-dns-for-root-domains or simply check with your provider). And to resolve www and wildcard subdomains to your Heroku-app, you need to create 2 CNAME-records, one of them a so called wildcard DNS record - a record type that's not supported by every Service. So in the worst case the creation of the desired mapping seems "impossible" on first sight, since not every Service / Provider permits you to perform the necessary DNS-Settings (see GoDaddy for instance) - but no worries: If that's the case a "little detour" should do the trick. Using DNSimple and GoDaddy as an example both scenarios are covered below :
 
 
-### Sceanario 1: Your Domain Service / Registrar permits CNAME-Records inkl. WildCard-records (e.g. DNSimple)
+### Sceanario 1: Your Domain Service / Registrar permits the necessary DNS-Settings
 
 
-If you host your domain with an awesome service like DNSimple the name really says it all, because setting up the necessary DNS-records is indeed pretty simple:
+If you host your domain with an awesome service like DNSimple (which allows CNAME- incl. WildCard-records) the name really says it all, because setting up the necessary DNS-records is indeed pretty simple:
 
 - Login to your DNSimple Account and navigate to your Dashboard
 - from the dashboard open the record editor for your domain (by clicking the icon with the tooltip "Jump to your DNS records" next to your domain name)
@@ -118,7 +188,7 @@ Type | Name | Content/DNS-Target
 ------------ | ------------- | -------------
 `ALIAS` | `[yourdomain].com` | `[yourapp].herokuapp.com`	 
 `CNAME` | `www.[yourdomain].com` | `[yourapp].herokuapp.com`		  
-`CNAME` | `*.[yourdomain].de` | `[yourapp].herokuapp.com`
+`CNAME` | `*.[yourdomain].com` | `[yourapp].herokuapp.com`
 
 
 
@@ -131,7 +201,7 @@ And if that wasn't easy enough, DNSimple offers a special "One click service"   
 
 
 
-### Sceanrio 2: Your Domain Registrar doesn't permit necessary DNS Settings like CNAME- incl. Widlcard-Records etc. (e.g. GoDaddy)
+### Sceanrio 2: Your Domain Registrar doesn't permit the necessary DNS Settings (e.g. GoDaddy)
 
 If you registered your domain with a registrar that doesn't allow you to add the necessary DNS records (like GoDaddy), you can either transfer your domain completely to a DNS Provider that does (like DNSimple) - or you can just transfer the hosting of your domain to such a provider. The latter means: Your registrar stays your registrar but your domain will no longer be hosted by this registrar - instead it will be hosted by another DNS Provider, who's domain services you want to use. This can be done by switching to the name servers of the Provider who shall host your domain. If you'd like to to transfer hosting from GoDaddy to DNSimple for example, follow these steps:
 
@@ -349,8 +419,8 @@ end
 
 
 
-- http://matthewhutchinson.net/2011/1/10/configuring-subdomains-in-development-with-lvhme
-- https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain
-- https://en.wikipedia.org/wiki/Wildcard_DNS_record
-- https://support.dnsimple.com/articles/delegating-dnsimple-hosted/
-- http://camaleon.tuzitio.com/documentation/category/40756-uncategorized/how.html
+* http://matthewhutchinson.net/2011/1/10/configuring-subdomains-in-development-with-lvhme
+* https://devcenter.heroku.com/articles/custom-domains#add-a-wildcard-domain
+* https://en.wikipedia.org/wiki/Wildcard_DNS_record
+* https://support.dnsimple.com/articles/delegating-dnsimple-hosted/
+* http://camaleon.tuzitio.com/documentation/category/40756-uncategorized/how.html
