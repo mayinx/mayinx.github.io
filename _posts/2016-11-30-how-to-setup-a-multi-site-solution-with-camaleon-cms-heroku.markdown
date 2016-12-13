@@ -1,4 +1,4 @@
-it---
+---
 published: false
 title: How to Setup a Multisite application with Camaleon CMS on Heroku  
 layout: post
@@ -49,7 +49,7 @@ Sidenote: Since there are excellent resources concerning installation and deploy
 
 ## Prerequisites
 
-Camaleon CMS is distributed as Ruby gem ready to be installed in Rails-Applications. So this tutorial assumes that you are familiar with the Web Application Framework Ruby on Rails and the Ruby gem-ecosystem - if that's not the case head over to [RailsHuides: Getting Started with Rails](http://guides.rubyonrails.org/getting_started.html) (or use another of the numerous excellent resources on this subject that are available online).
+Camaleon CMS is distributed as Ruby gem ready to be installed in Rails-Applications. So this tutorial assumes that you are familiar with the Web Application Framework Ruby on Rails and the Ruby gem-ecosystem - if that's not the case head over to [RailsGuides: Getting Started with Rails](http://guides.rubyonrails.org/getting_started.html) (or use another of the numerous excellent resources on this subject that are available online).
 
 Camaleon CMS itself has the following requirements:
 
@@ -58,7 +58,7 @@ Camaleon CMS itself has the following requirements:
 - Ruby 1.9.3+
 - Imagemagick
 
-Make sure to visit the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for possible updates on the requirements...
+Make sure to check the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for possible updates on the requirements...
 
 # 1. Setup a Camelon Multisite App Locally
 
@@ -83,7 +83,7 @@ Open a browser and visit http://localhost:3000/  - if you see the rails welcome 
 
 ##  Install Camaleon CMS
 
-Camaleon CMS can be easily installed as a Ruby gem, so the installation process is quite forward (but check the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for details and updates): Simply add the gem to your new app's Gemfile (located in `[yourrailsapp]/Gemfile` - e.g. `multisiteapp/Gemfile`) and use the terminal to run `bundle install` from your apps root directory:
+Camaleon CMS can be easily installed as a Ruby gem, so the installation process is quite forward (check the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for details and updates): Simply add the gem to your new app's Gemfile (located in `[yourrailsapp]/Gemfile` - e.g. `multisiteapp/Gemfile`) and use the terminal to run `bundle install` from your apps root directory:
 
 
 **Gemfile**
@@ -93,17 +93,11 @@ source 'https://rubygems.org'
 
 ruby "2.1.2"
 gem 'rails', '4.2.1'
-
 # ...
 # ...
-
-
-# Camaleon CMS is a dynamic and advanced content management system based on Ruby on Rails
 gem "camaleon_cms"
-
 # ...
 # ...
-
 ```
 
 **Terminal**
@@ -112,9 +106,7 @@ gem "camaleon_cms"
 ~/multisiteapp$ bundle install
 ```
 
-Now it's time to run the `camaleon_cms:install`-generator that's provided by the Camaleon CMS-gem; among other essential  CMS-specific stuff it adds a certain config-file (`config/system.json`) to your Rails-app that's important for our multisite setup.  
-
-
+Now it's time to run the `camaleon_cms:install`-generator that's provided by the camaleon_cms-gem; among other essential  CMS-specific stuff it adds a certain config-file (`config/system.json`) to your Rails-app that's important for our multisite setup.  
 
 **Terminal**
 
@@ -122,12 +114,9 @@ Now it's time to run the `camaleon_cms:install`-generator that's provided by the
 ~/multisiteapp$ rails generate camaleon_cms:install
 ```
 
-
-Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: [Up and Running with Camaleon CMS](https://www.sitepoint.com/up-and-running-with-camaleon-cms/). But read on before you push your app to Heroku:
-
 ## Edit config.json
 
-Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all Sites of the CMS-installation - or you can assign CMS-users to specific Sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the `config/system.json`-file (that was created when you run the `rails generate camaleon_cms:install` generator during the CMS-installation process) accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
+Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all sites of the CMS-installation - or you can assign CMS-users to specific sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the previously created `config/system.json`-file accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
 
 ```javascript
 // config/system.json
@@ -143,15 +132,40 @@ Camaleon CMS offers advanced role-based User Management. You can create CMS-user
 }
 ```
 
+## Create DB
+
+Run rake db:migrate in your terminal to create the DB structure:      
+
+**Terminal**
+
+```sh  
+~/multisiteapp$ **rake db:migrate**
+```
 
 
-## Test multisite locally with `lvh.me`
 
-Camaleon CMS has multisite support backed right in, so you don't need to take care of setting up virtual subdomain-based multi-tenancy in your Rails app. The CMS takes care of mapping incoming requests to the correct site by extracting the virtual subdomain from the request url & looking up the db for the site in question.  Thanks to this and domains like `lvh.me` (the "successor" of `smackaho.st`) setting up & testing multiple sites locally is a breeze.
+## Test your multisite app locally with `lvh.me`
 
-So once installation is complete you simply `cd` into your app's dir, fire up your local server by typing `rails s` in your terminal & navigate to http://lvh.me:3000/ with your browser. `lvh.me` (lvh = local virtual host) is a domain which resolves to your local machine (i.e. `localhost` (`127.0.0.1`)) - and the same goes for all its potential subdomains (`*.lvh.me`). So everything from `lvh.me` itself to `[whateverfancysubdomainyoucanthinkof].lvh.me` points to `127.0.0.1`, which makes the usage of this domain the ideal solution for local subdomain testing - no need to mess around with etc/hosts etc. anymore (the only "downside" is the need of a internet-connection - but that should be a given nowadays).     
+Camaleon CMS has multisite support backed right in, so you don't need to take care of setting up subdomain based multi-tenancy in your Rails app. This means that the CMS takes care of mapping incoming requests to the correct site by extracting the virtual subdomain from the request url & looking up the DB for the site in question etc. Thanks to this and domains like `lvh.me` (the "successor" of `smackaho.st`) setting up & testing multiple sites locally is a breeze.
+
+
+> `lvh.me` (lvh = local virtual host) is a domain which resolves to your local machine (i.e. `localhost` (`127.0.0.1`)) - and the same goes for all its potential subdomains (`*.lvh.me`). So everything from `lvh.me` itself to `[whateverfancysubdomainyoucanthinkof].lvh.me` points to `127.0.0.1`, which makes the usage of this domain the ideal solution for local subdomain testing - no need to mess around with etc/hosts anymore (the only "downside" is the need of a Internet-connection - but that should be a given nowadays).    
+
+So once installation is complete and the db structure was successfully created you simply fire up your local server by typing `rails s` in your terminal & navigate to http://lvh.me:3000/ with your browser:
+
+**Terminal**
+
+```sh  
+~/multisiteapp$ **rails s**
+```
+
+
+
 
 If you did setup everything fine, you should see <....>. <....>. Play a bit with Camaleon CMS to get aquainted with the CMS. Navigate to <....> to create a couple of sites and use sudomains as keys (slug) - let's say `fubar` and `barfu`. If you navigate to http://fubar.lvh.me:3000/ and http://barfu.lvh.me:3000/ you should see 2 different sites.    
+
+
+
 
 # 2. Local: Push your new app to heroku
 
@@ -424,3 +438,4 @@ end
 * https://en.wikipedia.org/wiki/Wildcard_DNS_record
 * https://support.dnsimple.com/articles/delegating-dnsimple-hosted/
 * http://camaleon.tuzitio.com/documentation/category/40756-uncategorized/how.html
+* Another great resource to get you started (including CMS-usage instructions & Heroku deployment etc.) can be found here: [Up and Running with Camaleon CMS](https://www.sitepoint.com/up-and-running-with-camaleon-cms/).
