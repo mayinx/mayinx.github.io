@@ -49,7 +49,7 @@ Sidenote: Since there are excellent resources concerning installation and deploy
 
 ## Prerequisites
 
-Camaleon CMS is distributed as Ruby gem ready to be installed in Rails-Applications. So this tutorial assumes that you are familiar with the Web Application Framework Ruby on Rails and the Ruby gem-ecosystem - if that's not the case head over to [RailsGuides: Getting Started with Rails](http://guides.rubyonrails.org/getting_started.html) (or use another of the numerous excellent resources on this subject that are available online).
+Camaleon CMS is distributed as Ruby gem ready to be installed in Rails-Applications. So this tutorial assumes that you are familiar with the Web Application Framework Ruby on Rails and the RubyGems-ecosystem - if that's not the case head over to [RailsGuides: Getting Started with Rails](http://guides.rubyonrails.org/getting_started.html) (or use another of the numerous excellent resources on this subject that are available online).
 
 Camaleon CMS itself has the following requirements:
 
@@ -66,13 +66,15 @@ Make sure to check the [Camaleon CMS-Github-repo](https://github.com/owen2345/ca
 
 Open a terminal window and create a new rails app named `multisiteapp` (or whatever name you prefer):
 
+**Terminal**
+
 ```sh  
 ~/projects$ rails new multisiteapp
 ```
 
 After the new application was successfully created `cd` into the new app's dir and fire up the local web server:
 
-
+**Terminal**
 ```sh  
 ~/projects$ cd multisiteapp
 ~/projects/multisiteapp$ rails server
@@ -81,17 +83,16 @@ After the new application was successfully created `cd` into the new app's dir a
 Open a browser and visit http://localhost:3000/  - if you see the rails welcome page you are good...
 
 
-##  Install Camaleon CMS
+##  Install Camaleon CMS & create the DB
 
 Camaleon CMS can be easily installed as a Ruby gem, so the installation process is quite forward (check the [Camaleon CMS-Github-repo](https://github.com/owen2345/camaleon-cms) for details and updates): Simply add the gem to your new app's Gemfile (located in `[yourrailsapp]/Gemfile` - e.g. `multisiteapp/Gemfile`) and use the terminal to run `bundle install` from your apps root directory:
 
 
-**Gemfile**
+<u>Gemfile</u>
 ```ruby  
 # Gemfile
 source 'https://rubygems.org'
 
-ruby "2.1.2"
 gem 'rails', '4.2.1'
 # ...
 # ...
@@ -100,23 +101,41 @@ gem "camaleon_cms"
 # ...
 ```
 
-**Terminal**
+
+<u>Terminal</u>
 
 ```sh  
 ~/multisiteapp$ bundle install
 ```
 
-Now it's time to run the `camaleon_cms:install`-generator that's provided by the camaleon_cms-gem; among other essential  CMS-specific stuff it adds a certain config-file (`config/system.json`) to your Rails-app that's important for our multisite setup.  
+Now it's time to run the `camaleon_cms:install`-generator that's provided by the `camaleon_cms`-gem; among other essential CMS-specific stuff (like the new `app/apps/themes`-directory & a `lib/plugin_routes.rb`-file) it adds a certain config-file (`config/system.json`) to your Rails-app that's important for our multisite setup.  
 
-**Terminal**
+<u>Terminal</u>
 
 ```sh  
 ~/multisiteapp$ rails generate camaleon_cms:install
 ```
 
+On top of that the generator appends code to the end of your Gemfile to include all gems for Camaleon's plugins and themes - that's why you should run another `bundle install` here:
+
+<u>Terminal</u>
+
+```sh  
+~/multisiteapp$ bundle install
+```
+
+
+Run `rake db:migrate` in your terminal to create the DB structure:      
+
+<u>Terminal</u>
+
+```sh  
+~/multisiteapp$ rake db:migrates
+```
+
 ## Edit config.json
 
-Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all sites of the CMS-installation - or you can assign CMS-users to specific sites only. The latter is meant for usecases like ours: Utilize Camaleon CMS to serve sites for different clients & allow those clients to use the CMS to update their sites. To achieve this, you need to edit the previously created `config/system.json`-file accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
+Camaleon CMS offers advanced role-based User Management. You can create CMS-users of different roles & either share them across all sites of the CMS-installation - or you can assign CMS-users to specific sites only. The latter is meant for use cases like ours: Utilize Camaleon CMS to serve independent sites for different clients & allow those clients to use the CMS to update their sites (and their sites only!). To achieve this, you need to edit the previously created `config/system.json`-file accordingly. All you need to do here is to set the config-option `"users_share_sites"` to `false`:   
 
 ```javascript
 // config/system.json
@@ -132,32 +151,27 @@ Camaleon CMS offers advanced role-based User Management. You can create CMS-user
 }
 ```
 
-## Create DB
-
-Run rake db:migrate in your terminal to create the DB structure:      
-
-**Terminal**
-
-```sh  
-~/multisiteapp$ **rake db:migrate**
-```
-
+If your use case differs - say your goal is to create multiple sites for one customer only & allow them to edit each of those sites - simply go with the default setting here (`"users_share_sites": false`) and you are good. The same goes if no customer is involved in editing sites at all - i.e. you alone / your team edits all sites...
 
 
 ## Test your multisite app locally with `lvh.me`
 
-Camaleon CMS has multisite support backed right in, so you don't need to take care of setting up subdomain based multi-tenancy in your Rails app. This means that the CMS takes care of mapping incoming requests to the correct site by extracting the virtual subdomain from the request url & looking up the DB for the site in question etc. Thanks to this and domains like `lvh.me` (the "successor" of `smackaho.st`) setting up & testing multiple sites locally is a breeze.
-
+Camaleon CMS has multisite support backed right in, so you don't need to take care of setting up subdomain based multi-tenancy in your Rails app. This means that the CMS takes care of mapping incoming requests to the correct site by extracting the virtual subdomain from the request url & looking up the DB for the site in question etc. Thanks to this and domains that enable us to use virtual subdomains locally - like `lvh.me` (the "successor" of `smackaho.st`) - setting up & testing multiple sites in your local development environment is a breeze. We just have to use http://lvh.me:3000/ instead http://localhost:3000.   
 
 > `lvh.me` (lvh = local virtual host) is a domain which resolves to your local machine (i.e. `localhost` (`127.0.0.1`)) - and the same goes for all its potential subdomains (`*.lvh.me`). So everything from `lvh.me` itself to `[whateverfancysubdomainyoucanthinkof].lvh.me` points to `127.0.0.1`, which makes the usage of this domain the ideal solution for local subdomain testing - no need to mess around with etc/hosts anymore (the only "downside" is the need of a Internet-connection - but that should be a given nowadays).    
 
-So once installation is complete and the db structure was successfully created you simply fire up your local server by typing `rails s` in your terminal & navigate to http://lvh.me:3000/ with your browser:
+So fire up your local server by typing `rails s` in your terminal & navigate to http://lvh.me:3000/ with your browser:
 
-**Terminal**
-
+<u>Terminal</u>
 ```sh  
-~/multisiteapp$ **rails s**
+~/projects/multisiteapp$ rails server
 ```
+
+You should be redirected to http://lvh.me:3000/admin/installers and see the '1st time setup page', where you are asked to specify "Domain", "Name" and "Template" of your default-/main-site . The Domain-form-field is prepolutated with your localhost-alias  
+
+**[SCREENSHOT]**
+
+
 
 
 
