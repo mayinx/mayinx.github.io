@@ -5,32 +5,41 @@ excerpt: How to right-align text in an inline-block element? How to align flex-i
 date: 2019-06-14
 ---
 
+How to right-align text in an inline-block element? How to align flex-items using auto-margins? This post gives a quick overview regarding available alignment options supported by Bootstrap.
+
 ## Aligning Elements in Bootstrap
 
-Aligning content inside a container like text etc. using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution for your situation among the options available can be a bit annoying.
+Aligning content inside an html-element (like text or further child-elements) using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution specific to your situation and requirements among the many options available can be a bit annoying and confusing.
 
 The following attempts to ease that process a bit by giving a quick overview regarding the available options to align content inside a container. ...  depending on the nature of the container in question - i.e. if it's a block or inline-block element or if flexbox shall be used etc.:
 
 ---------------------------------------------
 
-### Aligning content inside block elements (like `p` etc.)
+### Aligning content inside block elements 
 
-Use one of the following BS-CSS-classes on your block element:  
+If you need to align content inside block elements (like `p` etc.), use one of the following BS-CSS-classes:  
 
-- `text-start`, `text-end`, `text-center`
+- `text-start`
+- `text-end`
+- `text-center`
 - + responsive class-variations of the above (i.e. `text-md-start`, `text-xl-end` etc.)    
+
+Example from the BS-docs:
 
 ```
 <p class="text-start">Start aligned text on all viewport sizes.</p>
 <p class="text-center">Center aligned text on all viewport sizes.</p>
 <p class="text-end">End aligned text on all viewport sizes.</p> 
 ```
+
 Docs:
 - https://getbootstrap.com/docs/5.0/utilities/text/#text-alignment
 
 ---------------------------------------------
 
-### Aligning content inside inline-elements (like columns etc.)  
+### Aligning content inside inline-block elements 
+
+To align content inside inline-block elements (like columns etc.), you can   
 
 - `text-right` 
 
