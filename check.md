@@ -24,7 +24,7 @@ If you need to align content inside block elements (like `p` etc.), use one of t
 - `text-start`
 - `text-end`
 - `text-center`
-- + responsive class-variations of the above (i.e. `text-md-start`, `text-xl-end` etc.)    
+- plus responsive class-variations of the above (i.e. `text-md-start`, `text-xl-end` etc.)    
 
 Example from the BS-docs:
 
@@ -46,7 +46,7 @@ To align content like text inside inline-block elements (like columns etc.), not
 - `text-left` 
 - `text-right` 
 
-In the following example `text-center` works as expected - whereas `text-start` just appears to do the job (see second example below) - and `text-end` fails completely to right-align the colum's content: 
+Example 1: In the following example `text-center` works as expected - whereas `text-start` just appears to do the job (see second example below) - and `text-end` fails completely to right-align the colum's content: 
 
 ```
 <div class="row justify-content-around mb-3">
@@ -57,18 +57,16 @@ In the following example `text-center` works as expected - whereas `text-start` 
 </div>
 ```
 
-Now let's check if 'text-start' really works - for this we align the contents of the surrounding row to the right and see if its children (the columns) can override this to align their contents to the left:    
+Example 2: Now let's check if 'text-start' really works - for this we align the contents of the surrounding row to the right and see if its children (the columns) can override this to align their contents to the left - as we can see, obviously only `text-left`performs as expected in this context...
 
 ```
-
 <div class="row justify-content-around text-right">
   <div class="col-4 p-2 text-start bg-info text-white">COL 1</div>
   <div class="col-4 p-2 text-left bg-info text-white">COL 2</div>
-</div>
-  
+</div> 
 ```
 
-Obviously only `text-left`performs as expected in this context...
+
 
 ---------------------------------------------
 
