@@ -65,9 +65,6 @@ Example 2: Now let's check if 'text-start' really works - for this we align the 
   <div class="col-4 p-2 text-left bg-info text-white">COL 2</div>
 </div> 
 ```
-
-
-
 ---------------------------------------------
 
 ## Aligning content using Flexbox
@@ -149,6 +146,7 @@ Use one of the following BS-classes to fill the available space left or right of
   <div class="ml-auto p-2 bd-highlight">Flex item</div>
 </div>
 ```
+---------------------------------------------
 
 #### Vertical alignment with `mb-auto` + `mt-auto`
 
@@ -173,7 +171,6 @@ Example from the BS-docs:
 </div>
 ```
 
-
 BS-Docs on flexbox + auto-margins: 
 - https://getbootstrap.com/docs/4.6/utilities/flex/#auto-margins
 
@@ -191,9 +188,10 @@ Docs on all relevant BS-flexbox-alignment-features:
 - xxx
 - xxx
 
-
+---------------------------------------------
 
 ### TODO: 
 - float-start + float-end (or in BS5: float-start and float-end)
 - + responsive class-variations of the above (i.e. `float-md-start`, `float-xl-end` etc.)    
 
+---------------------------------------------
