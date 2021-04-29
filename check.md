@@ -1,8 +1,8 @@
 ---
-title: Front Matter Specifications
-tags: ["GitPress", "GitPressHelp"]
-excerpt: Explaination of front-matters, settings and default values supported by GitPress.
-date: 2018-12-31
+title: Aligning Elements in Bootstrap
+tags: ["Bootstrap", "CSS"]
+excerpt: Quick explaination of available aligning-options for elements supported by Bootstrap.
+date: 2019-06-14
 ---
 
 ## Aligning Elements in Bootstrap
@@ -10,10 +10,6 @@ date: 2018-12-31
 Aligning content inside a container like text etc. using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution for your situation among the options available can be a bit annoying.
 
 The following attempts to ease that process a bit by giving a quick overview regarding the available options to align content inside a container. ...  depending on the nature of the container in question - i.e. if it's a block or inline-block element or if flexbox shall be used etc.:
-
-### TODO: 
-- float-start + float-end (or in BS5: float-start and float-end)
-- + responsive class-variations of the above (i.e. `float-md-start`, `float-xl-end` etc.)    
 
 ---------------------------------------------
 
@@ -158,4 +154,8 @@ Docs on all relevant BS-flexbox-alignment-features:
 - https://getbootstrap.com/docs/4.6/utilities/flex/#auto-margins
 
 ---------------------------------------------
+
+#### TODO: 
+- float-start + float-end (or in BS5: float-start and float-end)
+- + responsive class-variations of the above (i.e. `float-md-start`, `float-xl-end` etc.)    
 
