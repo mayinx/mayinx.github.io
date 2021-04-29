@@ -13,7 +13,7 @@ The following attempts to ease that process a bit by giving a quick overview reg
 
 ---------------------------------------------
 
-### For block elements (like `p` etc.)
+### Aligning content inside block elements (like `p` etc.)
 
 Use one of the following BS-CSS-classes on your block element:  
 
@@ -30,7 +30,7 @@ Docs:
 
 ---------------------------------------------
 
-### For inline-elements (like columns etc.)  
+### Aligning content inside inline-elements (like columns etc.)  
 
 - `text-right` 
 
@@ -43,7 +43,7 @@ Docs:
 
 ---------------------------------------------
 
-### Using Flexbox
+### Aligning content using Flexbox
 
 
 
