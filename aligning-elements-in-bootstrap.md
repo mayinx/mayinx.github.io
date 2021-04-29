@@ -7,7 +7,7 @@ date: 2019-06-14
 
 How to right-align text in an inline-block element? How to align flex-items using auto-margins? This post gives a quick overview regarding available alignment options supported by Bootstrap.
 
-## Aligning Elements in Bootstrap
+# Aligning Elements in Bootstrap
 
 Aligning content inside an html-element (like text or further child-elements) using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution specific to your situation and requirements among the many options available can be a bit annoying and confusing. 
 
@@ -17,7 +17,7 @@ The following attempts to ease that process a bit by giving a quick overview reg
 
 ---------------------------------------------
 
-### Aligning content inside block elements 
+## Aligning content inside block elements 
 
 If you need to align content inside block elements (like `p` etc.), use one of the following BS-CSS-classes:  
 
@@ -39,7 +39,7 @@ Docs:
 
 ---------------------------------------------
 
-### Aligning content inside inline-block elements 
+## Aligning content inside inline-block elements 
 
 To align content like text inside inline-block elements (like columns etc.), not all of the above text-alignment classes are applicable. Whereas `text-center`works as expected, `text-start` and`text-end`don't. To left or right align text inside an inline-block-element, you need to use one of the BS-classes instead:   
 
@@ -70,9 +70,12 @@ Example 2: Now let's check if 'text-start' really works - for this we align the 
 
 ---------------------------------------------
 
-### Aligning content using Flexbox
+## Aligning content using Flexbox
 
-### `justify-content`: Changing the alignment of flex items on the flex main axis (per default - i.e. `flex-direction: row` - that's the alignment on the x-axis - so horizontal alignment. Once you change the flex-direction to column, the content is justified along the y-axis - so vertical alignment) 
+### `justify-content`: Aligning flex items on the main axis 
+
+Changing the alignment of flex items on the flex main axis (per default - i.e. `flex-direction: row` - that's the alignment on the x-axis - so horizontal alignment. Once you change the flex-direction to column, the content is justified along the y-axis - so vertical alignment) 
+
 
 - `.justify-content-start`
 - `.justify-content-end`
@@ -99,7 +102,9 @@ MDN-Docs on `justify-content`:
 
 ---------------------------------------------
 
-### `align-items`: Changing the alignment of flex items on the flex cross axis (per default - i.e. `flex-direction: row` - that's the alignment on the y-axis - so horizontal alignment. Once you change the flex-direction to column instead, the content is aligned along the x-axis - so vertical alignment) 
+### `align-items`: Aligning flex items on the cross axis 
+
+Changing the alignment of flex items along the flex cross axis (per default - i.e. `flex-direction: row` - that's the alignment on the y-axis - so horizontal alignment. Once you change the flex-direction to column instead, the content is aligned along the x-axis - so vertical alignment) 
 
 - `.align-items-start`
 - `.align-items-end`
@@ -180,7 +185,15 @@ Docs on all relevant BS-flexbox-alignment-features:
 
 ---------------------------------------------
 
-#### TODO: 
+### Sources
+
+- xxx
+- xxx
+- xxx
+
+
+
+### TODO: 
 - float-start + float-end (or in BS5: float-start and float-end)
 - + responsive class-variations of the above (i.e. `float-md-start`, `float-xl-end` etc.)    
 
