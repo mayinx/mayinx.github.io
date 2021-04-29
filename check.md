@@ -1,3 +1,10 @@
+---
+title: Front Matter Specifications
+tags: ["GitPress", "GitPressHelp"]
+excerpt: Explaination of front-matters, settings and default values supported by GitPress.
+date: 2018-12-31
+---
+
 ## Aligning Elements in Bootstrap
 
 Aligning content inside a container like text etc. using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution for your situation among the options available can be a bit annoying.
