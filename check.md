@@ -9,9 +9,11 @@ How to right-align text in an inline-block element? How to align flex-items usin
 
 ## Aligning Elements in Bootstrap
 
-Aligning content inside an html-element (like text or further child-elements) using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution specific to your situation and requirements among the many options available can be a bit annoying and confusing.
+Aligning content inside an html-element (like text or further child-elements) using the BS-Framework is no rocket science - it's all in the docs after all. However, flipping through the docs to find the right solution specific to your situation and requirements among the many options available can be a bit annoying and confusing. 
 
-The following attempts to ease that process a bit by giving a quick overview regarding the available options to align content inside a container. ...  depending on the nature of the container in question - i.e. if it's a block or inline-block element or if flexbox shall be used etc.:
+Depending on the nature of the element in question - e.g. if it's a block- or inline-block-element or if flexbox shall be used etc. - not all BS-classes 
+
+The following attempts to ease that process a bit by giving a quick overview regarding the available options to align content inside an (parent) element. ...  
 
 ---------------------------------------------
 
@@ -39,16 +41,34 @@ Docs:
 
 ### Aligning content inside inline-block elements 
 
-To align content inside inline-block elements (like columns etc.), you can   
+To align content like text inside inline-block elements (like columns etc.), not all of the above text-alignment classes are applicable. Whereas `text-center`works as expected, `text-start` and`text-end`don't. To left or right align text inside an inline-block-element, you need to use one of the BS-classes instead:   
 
+- `text-left` 
 - `text-right` 
 
+In the following example `text-center` works as expected - whereas `text-start` just appears to do the job (see second example below) - and `text-end` fails completely to right-align the colum's content: 
+
 ```
-<div class="row">
-    <div class="col-md-6">Total cost</div>
-    <div class="col-md-6 text-right">$42</div>
+<div class="row justify-content-around mb-3">
+  <div class="col-2 p-2 text-start bg-info text-white">COL 1</div>
+  <div class="col-2 p-2 text-center bg-info text-white">COL 2</div>
+  <div class="col-2 p-2 text-end bg-info text-white">COL 3</div>
+  <div class="col-2 p-2 text-right bg-info text-white">COL 4</div>
 </div>
 ```
+
+Now let's check if 'text-start' really works - for this we align the contents of the surrounding row to the right and see if its children (the columns) can override this to align their contents to the left:    
+
+```
+
+<div class="row justify-content-around text-right">
+  <div class="col-4 p-2 text-start bg-info text-white">COL 1</div>
+  <div class="col-4 p-2 text-left bg-info text-white">COL 2</div>
+</div>
+  
+```
+
+Obviously only `text-left`performs as expected in this context...
 
 ---------------------------------------------
 
