@@ -1,7 +1,7 @@
 ---
 title: Aligning Elements in Bootstrap
 tags: ["Bootstrap", "CSS"]
-excerpt: Quick explaination of available aligning-options for elements supported by Bootstrap.
+excerpt: How to right-align text in an inline-block element? How to align flex-items using auto-margins? This post gives a quick overview regarding available alignment options supported by Bootstrap.
 date: 2019-06-14
 ---
 
@@ -45,9 +45,7 @@ Docs:
 
 ### Aligning content using Flexbox
 
-
-
-### `justify-content`: changing the alignment of flex items on the flex main axis (per default - i.e. `flex-direction: row` - that's the alignment on the x-axis - so horizontal alignment. Once you change the flex-direction to column, the content is justified along the y-axis - so vertical alignment) 
+### `justify-content`: Changing the alignment of flex items on the flex main axis (per default - i.e. `flex-direction: row` - that's the alignment on the x-axis - so horizontal alignment. Once you change the flex-direction to column, the content is justified along the y-axis - so vertical alignment) 
 
 - `.justify-content-start`
 - `.justify-content-end`
@@ -56,6 +54,7 @@ Docs:
 - `.justify-content-around`
 - `.justify-content-evenly`
 - + responsive class-variations of the above (i.e. `justify-content-md-start`, `justify-content-xl-end` etc.)    
+
 
 ```
 <div class="d-flex justify-content-end bd-highlight mb-3">
@@ -73,7 +72,7 @@ MDN-Docs on `justify-content`:
 
 ---------------------------------------------
 
-### `align-items`: changing the alignment of flex items on the flex cross axis (per default - i.e. `flex-direction: row` - that's the alignment on the y-axis - so horizontal alignment. Once you change the flex-direction to column instead, the content is aligned along the x-axis - so vertical alignment) 
+### `align-items`: Changing the alignment of flex items on the flex cross axis (per default - i.e. `flex-direction: row` - that's the alignment on the y-axis - so horizontal alignment. Once you change the flex-direction to column instead, the content is aligned along the x-axis - so vertical alignment) 
 
 - `.align-items-start`
 - `.align-items-end`
@@ -118,7 +117,6 @@ Use one of the following BS-classes to fill the available space left or right of
   <div class="ml-auto p-2 bd-highlight">Flex item</div>
 </div>
 ```
-
 
 #### Vertical alignment with `mb-auto` + `mt-auto`
 
